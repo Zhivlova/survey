@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  web:
+    container_name: marketresearcher
+    image: marketresearcher
+    build: .
+    command: gunicorn config.wsgi -b 0.0.0.0:8000
+    volumes:
+      - .:/code
+    environment:
+      # Django
+      - "DJANGO_SECRET_KEY= "
+      - "DJANGO_DEBUG=True"
+      # Swagger
+      - "SWAGGER_URL=http://127.0.0.1:8010"
+      # Cookies
+      - "DJANGO_SESSION_COOKIE_SECURE=False"
+      - "DJANGO_CSRF_COOKIE_SECURE=False"
+      # Postgres
+      - "DBNAME=postgres"
+      - "DBUSER=postgres"
+      - "DBPASSWORD=postgres"
+      - "DBHOST=db"
+      - "DBPORT=5432"
+
+    ports:
+      - 8010:8000
+    networks:
+      - djangonetwork
+    restart: always
+
+  db:
+    container_name: marketresearcher-db
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 8009:5432
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    networks:
+      - djangonetwork
+
+volumes:
+  postgres_data:
+
+networks:
+  djangonetwork:
+    driver: bridge

@@ -91,8 +91,12 @@ WSGI_APPLICATION = "marketresearcher.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "surveys",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        "HOST": "db",
+        "PORT": "5432",
     }
 }
 
@@ -115,6 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'polls.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -145,3 +150,4 @@ REST_FRAMEWORK_RENDERER = {
         "rest_framework.renderers.AdminRenderer",
     ]
 }
+
